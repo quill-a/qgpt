@@ -37,5 +37,7 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### API Keys ###
+### API Key ###
 .env/key.txt
+
+### Test API ###
