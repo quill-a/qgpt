@@ -41,3 +41,4 @@ build/
 .env/key.txt
 
 ### Test API ###
+gpt.http
