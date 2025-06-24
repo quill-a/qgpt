@@ -1,4 +1,4 @@
 package dev.quilla;
 
-public record GptResponseChoice() {
+public record GptResponseChoice(String text, int index, Object logprobs, String finish_reason) {
 }
