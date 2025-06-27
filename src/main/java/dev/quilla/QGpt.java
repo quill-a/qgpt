@@ -2,36 +2,40 @@ package dev.quilla;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class QGpt {
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        // Grab the API key from environment variable(s).
+        String apiKeyStr = Optional.ofNullable(System.getenv("API_KEY")).orElseThrow(() ->
+                new IllegalStateException("API_KEY env var is not defined"));
 
-
-        String keyStr = getKey();
-
-        // Initialize Scanner for user input.
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a string to search for: ");
-        String searchString = scanner.nextLine();
+        // User input
+        String prompt;
+        if(args.length > 0){
+            prompt = args[0];
+        }  else {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter a string to search for: ");
+            prompt = scanner.nextLine();
+        }
 
         // Instantiate the GptRequest object and convert it to a string for HttpRequest.
         ObjectMapper objectMapper = new ObjectMapper();
-        GptRequest gptRequest = new GptRequest("gpt-3.5-turbo-instruct", searchString, 1, 100);
+        GptRequest gptRequest = new GptRequest("gpt-3.5-turbo-instruct", prompt, 1, 100);
         String userInput = objectMapper.writeValueAsString(gptRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/completions"))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " +  keyStr)
+                .header("Authorization", "Bearer " +  apiKeyStr)
                 .POST(HttpRequest.BodyPublishers.ofString(userInput))
                 .build();
 
@@ -58,12 +62,4 @@ public class QGpt {
             System.out.println(response.body());
         }
     }
-
-    public static String getKey() throws IOException {
-
-        // Take key.txt and convert it to String object for interpolation in main
-        File keyFile = new File(".env/key.txt");
-        return new String(Files.readAllBytes(keyFile.toPath()));
-    }
-
 }
