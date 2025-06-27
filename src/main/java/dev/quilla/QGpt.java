@@ -17,7 +17,6 @@ public class QGpt {
 
 
         String keyStr = getKey();
-//        System.out.println(keyStr);
 
         // Initialize Scanner for user input.
         Scanner scanner = new Scanner(System.in);

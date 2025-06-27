@@ -38,7 +38,7 @@ build/
 .DS_Store
 
 ### API Key ###
-.env/key.txt
+.env/
 
 ### Test API ###
 gpt.http
