@@ -26,11 +26,11 @@ public class QGpt {
 
         // Instantiate the GptRequest object and convert it to a string for HttpRequest.
         ObjectMapper objectMapper = new ObjectMapper();
-        GptRequest gptRequest = new GptRequest("gpt-4o-mini", searchString, 1, 100);
+        GptRequest gptRequest = new GptRequest("gpt-3.5-turbo-instruct", searchString, 1, 100);
         String userInput = objectMapper.writeValueAsString(gptRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.openai.com/v1/completions"))  //https://api.github.com/users/gpt-4o-mini/repos
+                .uri(URI.create("https://api.openai.com/v1/completions"))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " +  keyStr)
                 .POST(HttpRequest.BodyPublishers.ofString(userInput))
@@ -43,17 +43,13 @@ public class QGpt {
 
             // Instantiate a response object and grab the response that is at the last index, which is
             // assumed to be the most relevant.
-            var GptResponse = objectMapper.readValue(response.body(), GptResponse.class);
-            String answer = GptResponse.choices()[GptResponse.choices().length - 1].text();
+            var gptResponse = objectMapper.readValue(response.body(), GptResponse.class);
+            String answer = gptResponse.choices()[gptResponse.choices().length - 1].text();
 
             if(!answer.isEmpty()){
 
-                // Remove any newline characters given in the response.
-                answer = answer.replace("\n", "");
-
-                // TODO Figure out how to trim GPT's responses to remove the '**A ' and everything after the last whitespace.
-
-                System.out.println(answer);
+                // Remove any newline characters from the response and print to the console.
+                System.out.println(answer.replace("\n", ""));
             }
 
         } else {
