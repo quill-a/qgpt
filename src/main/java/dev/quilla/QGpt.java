@@ -14,8 +14,8 @@ public class QGpt {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         // Grab the API key from environment variable(s).
-        String apiKeyStr = Optional.ofNullable(System.getenv("API_KEY")).orElseThrow(() ->
-                new IllegalStateException("API_KEY env var is not defined"));
+        String apiKeyStr = Optional.ofNullable(System.getenv("GPT_API_KEY")).orElseThrow(() ->
+                new IllegalStateException("GPT_API_KEY env var is not defined"));
 
         // User input
         String prompt;
